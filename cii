@@ -1,0 +1,589 @@
+""HÀM CHUẨN HÓA TÊN VÀ CHUẨN HÓA NGÀY ""
+  public static String Name (String s){
+        String[] w = s.trim().split("\\s+");
+        String res= "";
+        for(int i =0;i<w.length;i++) {
+            res += w[i].substring(0, 1).toUpperCase() + w[i].substring(1).toLowerCase() + " ";
+        }return res.substring(0, res.length()-1);
+    }
+    public static String Date(String s){
+        StringBuilder sb= new StringBuilder(s);
+        if ( sb.charAt(1) == '/') sb.insert(0, '0');
+        if ( sb.charAt(4) == '/') sb.insert(3, '0');
+        return sb.toString();
+    }
+ 1.  BÀI TỔNG VÀ TÍCH CÁC CHỮ SỐ KHÁC NHAU 
+
+
+import java.util.*;
+import java.io.*;
+import java.math.BigInteger;
+public class tichvatongcacchusokhacnhau{
+    public static void main(String[] args) throws IOException{
+        Scanner sc = new Scanner(new File("DATA.in"));
+        TreeSet<BigInteger>ts = new TreeSet<>();
+        while(sc.hasNextBigInteger()) ts.add(sc.nextBigInteger());
+        BigInteger tong = BigInteger.ZERO, tich = BigInteger.ONE;
+        for(BigInteger x: ts){
+            tong = tong.add(x);
+            tich = tich.multiply(x);
+        }
+        System.out.println(tong + "\n" + tich);
+    }
+}
+
+
+
+2 .TÍCH MA TRẬN 
+Kiểu 1 : 
+import java.util.Scanner;
+
+class Matrix {
+    private int[][] data;
+    private int rows, cols;
+
+    public Matrix(int rows, int cols) {
+        this.rows = rows;
+        this.cols = cols;
+        data = new int[rows][cols];
+    }
+
+    public void nextMatrix(Scanner sc) {
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
+                data[i][j] = sc.nextInt();
+    }
+
+    public Matrix mul(Matrix other) {
+        if (this.cols != other.rows) return null;
+
+        Matrix result = new Matrix(this.rows, other.cols);
+
+        for (int i = 0; i < this.rows; i++) {
+            for (int j = 0; j < other.cols; j++) {
+                int sum = 0;
+                for (int k = 0; k < this.cols; k++) {
+                    sum += this.data[i][k] * other.data[k][j];
+                }
+                result.data[i][j] = sum;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                sb.append(data[i][j]);
+                if (j < cols - 1) sb.append(" ");
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+}
+
+public class matran {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt(), m = sc.nextInt(), p = sc.nextInt();
+
+        Matrix a = new Matrix(n, m);
+        a.nextMatrix(sc);
+
+        Matrix b = new Matrix(m, p);
+        b.nextMatrix(sc);
+
+        System.out.println(a.mul(b));
+    }
+}
+
+ 
+Kiểu 2 : 
+import java.util.*;
+class Matran{
+    private int n;
+    private int [][]a;
+    public Matran(int n){
+        this.n = n;
+        this.a = new int[n][n];
+    }
+    public int [][] getMatran(){
+        return this.a;
+    }
+    public void input(Scanner sc){
+        for(int i = 0;i<this.n;i++){
+            for(int j = 0;j<this.n;j++) this.a[i][j] = sc.nextInt();
+        }
+    }
+    public int getKT(){
+        return this.n;
+    }
+    public void out(){
+        for(int i = 0;i<this.n;i++){
+            for(int j = 0;j<this.n;j++) System.out.print(this.a[i][j] + " ");
+            System.out.println();
+        }
+    }
+    public Matran tich(int [][]b){
+        Matran res = new Matran(this.n);
+        for(int i = 0;i<this.n;i++){
+            for(int j = 0;j<this.n;j++){
+                res.a[i][j] = 0;
+                for(int k = 0; k < this.n; k++) res.a[i][j] += this.a[i][k] * b[k][j];
+            }
+        }
+        return res;
+    }
+}
+public class KT1_17_TICH_HAI_MA_TRAN {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        //nhap kich thuoc
+        int n = sc.nextInt();
+        Matran m = new Matran(n);
+        //nhap ma tran a
+        m.input(sc);
+        Matran b = new Matran(m.getKT());
+        //nhap ma tran b
+        b.input(sc);
+        Matran h = m.tich(b.getMatran());
+        //viet ra ma tran tich
+        h.out();
+    }
+}
+
+
+3. BẦU CỬ 
+package THI_CUOI_KY_D21_Demo;
+import java.util.*;
+class Pair implements Comparable<Pair> {
+    private int first, second;
+    public Pair(int first, int second) {
+        this.first = first;
+        this.second = second;
+    }
+    @Override
+    public int compareTo(Pair o) {
+        if (this.second != o.second) return this.second - o.second; // Sắp xếp theo second tăng dần
+        return this.first - o.first; // Nếu second bằng nhau thì sắp xếp theo first tăng dần
+    }
+    public int getFirst() {
+        return first;
+    }
+    public int getSecond() {
+        return second;
+    }
+}
+
+public class BAU_CU {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt(), m = sc.nextInt();
+        int[] a = new int[n], cnt = new int[1000]; 
+        for (int i = 0; i < n; ++i) {
+            a[i] = sc.nextInt();
+            cnt[a[i]]++;
+        }
+        ArrayList<Pair> count = new ArrayList<>();
+        for (int x : a) {
+            if (cnt[x] > 0) {
+                count.add(new Pair(x, cnt[x]));
+                cnt[x] = 0;
+            }
+        }
+        Collections.sort(count);
+        int result = -1;
+        for (int i = count.size() - 2; i >= 0; --i) {
+            if (count.get(i).getSecond() < count.get(count.size() - 1).getSecond()) {
+                result = count.get(i).getFirst();
+                break;
+            }
+        }
+        if (result == -1) System.out.println("NONE");
+        else System.out.println(result);
+    }
+}
+
+
+4. TÍNH ĐIỂM TRUNG BÌNH 
+package THI_CUOI_KY_D21_Demo;
+import java.util.*;
+public class JP016_TINH_DIEM_TRUNG_BINH {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        double[] a = new double[n];
+        for (int i = 0; i < n; i++) a[i] = sc.nextDouble();
+
+        double Min = a[0], Max = a[0];
+        for (int i = 1; i < n; i++) {
+            Max = Double.max(Max, a[i]);
+            Min = Double.min(Min, a[i]);
+        }
+        double tong = 0;
+        int cnt = 0;
+        for (double x : a) {
+            if (x != Max && x != Min) {
+                tong += x;
+                cnt++;
+            }
+        }
+        System.out.printf("%.2f", tong / cnt);
+        sc.close();
+    }
+}
+
+
+
+^^^ SỐ NGUYÊN TỐ TRONG FILE NHỊ PHÂN >>>
+import java.util.*;
+import java.io.*;
+
+public class Main{
+    public static void main(String[] args) throws IOException, ClassNotFoundException{
+        boolean[] f = new boolean[100005];
+        for(int i=2; i<f.length; i++) f[i]=true;
+        for(int i=2; i<=(int)Math.sqrt(f.length); i++){
+            if(f[i]){
+                for(int u=i; u<=100000/i; u++) f[i*u]=false;
+            }
+        }
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("SONGUYEN.in"));
+        ArrayList<Integer> a = (ArrayList<Integer>) ois.readObject();
+        TreeMap<Integer, Integer> hm = new TreeMap<>();
+        a.forEach(e ->{
+            if(f[e]){
+                if(hm.get(e) == null) hm.put(e, 1);
+                else hm.put(e, hm.get(e)+1);
+            }
+        });
+        hm.forEach((k, v) -> {
+            System.out.println(k + " " + v);
+        });
+    }
+}
+
+
+"""""SỐ KHÔNG GIẢM TRONG FILE NHỊ PHÂN 
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    public static boolean isNonDecreasing(int n) {
+        if (n < 10) return false; // phải có ít nhất 2 chữ số
+        String s = String.valueOf(n);
+        for (int i = 1; i < s.length(); i++) {
+            if (s.charAt(i) < s.charAt(i - 1)) return false;
+        }
+        return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static ArrayList<Integer> readFile(String filename) throws Exception {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename));
+        ArrayList<Integer> list = (ArrayList<Integer>) ois.readObject();
+        ois.close();
+        return list;
+    }
+
+    public static Map<Integer, Integer> countNonDecreasing(ArrayList<Integer> list) {
+        Map<Integer, Integer> freq = new HashMap<>();
+        for (int num : list) {
+            if (isNonDecreasing(num)) {
+                freq.put(num, freq.getOrDefault(num, 0) + 1);
+            }
+        }
+        return freq;
+    }
+
+    public static void main(String[] args) throws Exception {
+        ArrayList<Integer> list1 = readFile("DATA1.in");
+        ArrayList<Integer> list2 = readFile("DATA2.in");
+
+        Map<Integer, Integer> freq1 = countNonDecreasing(list1);
+        Map<Integer, Integer> freq2 = countNonDecreasing(list2);
+
+        // Lấy giao của 2 tập
+        TreeSet<Integer> common = new TreeSet<>();
+        for (int num : freq1.keySet()) {
+            if (freq2.containsKey(num)) {
+                common.add(num);
+            }
+        }
+
+        // In kết quả
+        for (int num : common) {
+            System.out.println(num + " " + freq1.get(num) + " " + freq2.get(num));
+        }
+    }
+}
+
+
+
+"""" GIÁ TRỊ NHỊ PHÂN""""
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+    @SuppressWarnings("unchecked")
+    public static void main(String[] args) throws Exception {
+        // Đọc file nhị phân
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("DATA.in"));
+        ArrayList<String> list = (ArrayList<String>) ois.readObject();
+        ois.close();
+
+        for (String s : list) {
+            // Lấy các ký tự 0 và 1
+            StringBuilder binary = new StringBuilder();
+            for (char c : s.toCharArray()) {
+                if (c == '0' || c == '1') {
+                    binary.append(c);
+                }
+            }
+
+            // Nếu không có ký tự nào thì bỏ qua
+            if (binary.length() == 0) continue;
+
+            // Chuyển sang số thập phân
+            long decimal = Long.parseLong(binary.toString(), 2);
+
+            // In kết quả
+            System.out.println(binary + " " + decimal);
+        }
+    }
+}
+
+
+5.DANH SÁCH PHIM
+import java.util.*;
+class Phim implements Comparable<Phim> {
+    private String MaPhim, TheLoai, NgayChieu, TenPhim;
+    private int SoTap, ngay, thang, nam;
+    public Phim(int x, String TheLoai, String NgayChieu, String TenPhim, int SoTap) {
+        this.MaPhim = "P" + String.format("%03d", x);
+        this.TheLoai = TheLoai;
+        this.NgayChieu = NgayChieu;
+        this.TenPhim = TenPhim;
+        this.SoTap = SoTap;
+        String[] parts = this.NgayChieu.split("/");
+        this.ngay = Integer.parseInt(parts[0]);
+        this.thang = Integer.parseInt(parts[1]);
+        this.nam = Integer.parseInt(parts[2]);
+    }
+    @Override
+    public int compareTo(Phim o) {
+        if (this.nam != o.nam) return this.nam - o.nam;
+        else if (this.thang != o.thang) return this.thang - o.thang;
+        else if (this.ngay != o.ngay) return this.ngay - o.ngay;
+        else if (!this.TenPhim.equals(o.TenPhim)) return this.TenPhim.compareTo(o.TenPhim);
+        else return o.SoTap - this.SoTap; 
+    }
+
+    @Override
+    public String toString() {
+        return MaPhim + " " + TheLoai + " " + NgayChieu + " " + TenPhim + " " + SoTap;
+    }
+}
+
+public class JP499_DANH_SACH_PHIM {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        HashMap<String, String> d = new HashMap<>();
+        int n = sc.nextInt(), m = sc.nextInt();
+        sc.nextLine(); 
+        for (int i = 0; i < n; i++) {
+            String s = "TL" + String.format("%03d", i + 1);
+            String s1 = sc.nextLine().trim();
+            d.put(s, s1);
+        }
+        ArrayList<Phim> a = new ArrayList<>();
+        for (int i = 1; i <= m; i++) {
+            String TheLoai = sc.nextLine().trim();
+            String NgayChieu = sc.nextLine().trim();
+            String TenPhim = sc.nextLine().trim();
+            int SoTap = Integer.parseInt(sc.nextLine().trim());
+            Phim tmp = new Phim(i, d.get(TheLoai), NgayChieu, TenPhim, SoTap);
+            a.add(tmp);
+        }
+        Collections.sort(a); // Sắp xếp danh sách a
+        for (Phim phim : a) System.out.println(phim);
+    }
+}
+
+
+6.LUYỆN TẬP LẬP TRÌNH
+import java.util.*;
+import java.io.*;
+class Student implements Comparable<Student>{
+    private String name;
+    private int correct, submit;
+    public Student(String name, int correct, int submit){
+        this.name = name;
+        this.correct = correct;
+        this.submit = submit;
+    }
+    @Override
+    public int compareTo(Student t) {
+        if(this.correct!=t.correct) return t.correct - this.correct;
+        if(this.submit!=t.submit) return this.submit - t.submit;
+        return this.name.compareTo(t.name);
+    }
+    public String toString(){ 
+        return this.name.trim() + " " + this.correct + " " + this.submit;
+    }
+}
+public class JP037_LUYEN_TAP_LAP_TRINH{
+    public static void main(String[] args) throws IOException{
+        Scanner sc = new Scanner (new File("LUYENTAP.in"));
+        int n = sc.nextInt();
+        Student []a = new Student[n];
+        for(int i = 0;i<n;i++){ 
+            sc.nextLine();
+            a[i] = new Student(sc.nextLine(), sc.nextInt(), sc.nextInt());
+        }
+        Arrays.sort(a);
+        for(Student x: a) System.out.println(x);
+    }
+}
+
+
+7 ĐỒNG PHỤC 
+import java.io.*;
+import java.util.*;
+class Student implements Comparable<Student>{
+    private String msv, ten, lop, email, sdt, gioiTinh, sizeAo;
+    public Student(String msv, String ten, String lop, String email, String std, String gioiTinh) {
+        this.msv = msv;
+        this.ten = ten;
+        this.lop = lop;
+        this.email = email;
+        this.sdt =std;
+        this.gioiTinh = gioiTinh;
+    }   
+    public void setSizeAo(String sizeAo) {
+        this.sizeAo = sizeAo;
+    }
+    public String getSizeAo() {
+        return sizeAo;
+    }
+    public String getGioiTinh() {
+        return gioiTinh;
+    }
+    @Override
+    public String toString() {
+        return String.format("%s %s %s %s %s", this.msv, this.ten, this.lop, this.email, this.sdt);
+    }
+    @Override
+    public int compareTo(Student o) {
+        return this.msv.compareTo(o.msv);
+    }
+    
+}
+
+public class JP118_DONG_PHUC {
+    public static void main(String[] args) throws IOException{
+        Scanner sc = new Scanner(new File("SINHVIEN.in"));
+        int n = Integer.parseInt(sc.nextLine());
+        ArrayList<Student>a = new ArrayList<>();
+        for(int i = 0;i<n;i++) a.add(new Student(sc.nextLine(), sc.nextLine(), sc.nextLine(), sc.nextLine(), sc.nextLine(), sc.nextLine()));
+        sc = new Scanner(new File("DANGKY.in"));
+        for(int i = 0;i<n;i++){
+            String s = sc.nextLine();
+            String []tmp1 = s.trim().split("\\s+");
+            a.get(i).setSizeAo(tmp1[1]);
+        }
+        sc = new Scanner(new File("TRUYVAN.in"));
+        Collections.sort(a);
+        int q = Integer.parseInt(sc.nextLine());
+        for(int i = 0;i<q;i++){
+            String s = sc.nextLine();
+            String []tmp1 = s.trim().split("\\s+");
+            String gioi = tmp1[0].toUpperCase(), sizeAo = tmp1[1];
+            System.out.println(String.format("DANH SACH SINH VIEN %s DANG KY SIZE %s", gioi, sizeAo));
+            for(Student x: a){
+                if(x.getSizeAo().equals(sizeAo) && x.getGioiTinh().toUpperCase().equals(gioi)) System.out.println(x);
+            }
+        }
+    }
+}
+
+
+8. TRÚNG TUYỂN 
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
+public class Trungtuyen {
+    static double diemChuan ;
+    private static class ThiSinh implements Comparable<ThiSinh>{
+        private String id,name;
+        private double scoreT,scoreL,scoreH,priorityScore,totalScore;
+        private String tt;
+
+        ThiSinh(String id, String name, double scoreT, double scoreL, double scoreH) {
+            this.id = id;
+            this.name = chuanHoaTen(name);
+            this.scoreT = scoreT;
+            this.scoreL = scoreL;
+            this.scoreH = scoreH;
+            this.priorityScore = 0;
+            if(id.startsWith("KV1")) this.priorityScore = 0.5;
+            if(id.startsWith("KV2")) this.priorityScore = 1.0;
+            if(id.startsWith("KV3")) this.priorityScore = 2.5;
+            this.totalScore = scoreT*2+scoreL+scoreH+ this.priorityScore;
+            
+        }
+        static String chuanHoaTen(String s){
+            s = s.trim().toLowerCase();
+            String res = "" + Character.toUpperCase(s.charAt(0));
+            for(int i=1; i< s.length();i++){
+                if(Character.isLetter(s.charAt(i))){
+                    if(s.charAt(i-1) == ' ') res+= " "+ Character.toUpperCase(s.charAt(i));
+                    else res += s.charAt(i);
+                }
+            }
+            return res;
+        }
+        
+        @Override
+        public int compareTo(ThiSinh o) {
+            if(this.totalScore<o.totalScore) return 1;
+            if(this.totalScore>o.totalScore) return -1;
+            return this.id.compareTo(o.id);
+        }        
+        
+        void inThongTin(){
+            System.out.print(this.id+' '+this.name+' ');
+            if((int)this.priorityScore == this.priorityScore ) System.out.printf("%.0f ",this.priorityScore);
+            else  System.out.printf("%.1f ",this.priorityScore);
+            if((int)this.totalScore == this.totalScore ) System.out.printf("%.0f ",this.totalScore);
+            else  System.out.printf("%.1f ",this.totalScore);
+            if(this.totalScore>=diemChuan) this.tt = "TRUNG TUYEN";
+            else this.tt = "TRUOT";
+            System.out.println(this.tt);
+        }
+    }
+    public static void main(String []args) throws FileNotFoundException{
+        Scanner sc = new Scanner(new File("THISINH.in"));
+        ArrayList<ThiSinh> ds = new ArrayList<>();
+        int t = sc.nextInt();
+        while(t-->0){
+            sc.nextLine();
+            ds.add(new ThiSinh(sc.nextLine(),sc.nextLine(),sc.nextDouble(),sc.nextDouble(),sc.nextDouble()));
+        }
+        int k = sc.nextInt();
+        Collections.sort(ds);
+        diemChuan = ds.get(k-1).totalScore;
+        System.out.printf("%.1f\n",diemChuan);
+        for(ThiSinh tmp : ds) 
+            tmp.inThongTin();
+    }
+}
+
